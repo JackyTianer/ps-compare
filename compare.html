@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .main:after {
+            display: block;
+            content: '';
+            clear: both;
+            zoom: 1;
+        }
+
+        #j-diff {
+            cursor: pointer;
+        }
+
+        .diff {
+            float: left;
+            width: 1000px;
+            padding-right: 20px;
+            border-left: 1px solid #e5e5e5;
+        }
+
+        .control-board {
+            float: left;
+            margin-left: 15px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+<div class="origin">
+    <img src="img/1.png" alt="" style="max-width: 490px">
+    <img src="img/2.png" alt="" style="max-width: 490px; margin-left: 20px">
+</div>
+
+<div class="main">
+    <div id="j-diff" class="diff">
+        <img id="j-img" style="max-width: 1000px"></img>
+    </div>
+    <div class="control-board">
+        <h2>控制台</h2>
+        <button id="j-nothing">不忽略</button>
+        <button id="j-less">忽略细节</button>
+        <button id="j-color">忽略颜色</button>
+    </div>
+</div>
+<script src="node_modules/resemblejs/resemble.js"></script>
+<script>
+    var imgDom = document.querySelector('#j-img');
+    var resembleControl = resemble('img/1.png').compareTo('img/2.png').ignoreNothing().onComplete(function (data) {
+        imgDom.src = data.getImageDataUrl();
+        document.querySelector('#j-diff').addEventListener('click', function (e) {
+            window.open(imgDom.src, '_blank');
+            e.stopPropagation();
+        });
+    });
+    document.querySelector('#j-color').onclick = function () {
+        resembleControl.ignoreColors();
+    };
+
+    document.querySelector('#j-less').onclick = function () {
+        resembleControl.ignoreLess();
+    };
+
+    document.querySelector('#j-nothing').onclick = function () {
+        resembleControl.ignoreNothing();
+    };
+
+</script>
+</body>
+</html>
